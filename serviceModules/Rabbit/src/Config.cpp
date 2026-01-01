@@ -4,6 +4,10 @@
 // ali-oss config
 // Please configure the AccessKey or Token for the OSS.
 // such as AccessKeyId,AccessKeySecret,Endpoint,Bucket
+std::string Config::AccessKeyId = "your Id";
+std::string Config::AccessKeySecret = "your Key";
+std::string Config::Endpoint = "your endpoint ";
+std::string Config::Bucket = "your bucket";
 
 
 std::string Config::host = "127.0.0.1";  // RabbitMQ Server的地址  
