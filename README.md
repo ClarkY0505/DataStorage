@@ -40,7 +40,7 @@ It still has many ideas that have not been realized. As my abilities improve, I 
 
 2. Alibaba Cloud OSS Storage
 
-   1. download and install [OSS C++ SDK](https://help.aliyun.com/zh/oss/developer-reference/cpp/?spm=a2c4g.11186623.0.i1)
+   1. download and install [OSS C++ SDK](https://github.com/aliyun/aliyun-oss-cpp-sdk)
 
       ```shell
       # Install dependent libraries
