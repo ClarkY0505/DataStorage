@@ -143,11 +143,11 @@ At present, a basic function of data storage has been implemented.
    $ ./service_manage.sh {start|stop|status|restart|log}
    
    Generate output based on the options given:
-     start      Start all services
+     start		Start all services
      stop      Stop all services
-     status   Check service status
-     restart  Restart all services
-     log         View logs (requires a second parameter)
+     status	Check service status
+     restart	Restart all services
+     log		View logs (requires a second parameter)
    ```
    
 
