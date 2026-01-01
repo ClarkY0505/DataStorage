@@ -158,8 +158,7 @@ At present, a basic function of data storage has been implemented.
 1. Log collection service.
 2. Load balancing(Server Load Balancing or Dynamic Load Balancing,I have no idea which method to use. Try it and see how it goes :) ).
 3. API Gateway Cluster? Perhaps it will come true.
-4. Log analysis and alarm notifications
+4. Log analysis and warning notifications
 5. Damn that web page! But I can do nothing about it. Let's talk about it later.
 
-## 
 
