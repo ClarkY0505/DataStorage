@@ -1,0 +1,20 @@
+// example.proto
+syntax = "proto3";  // proto2和proto3都可以, srpc都支持
+
+message EchoRequest {
+    string username = 1;
+    string password = 2;
+};
+
+message EchoResponse {
+    bool success = 1;      
+    string message = 2;    
+    int64 userid = 3;      
+    string username = 4;   
+    int32 code = 5; 
+}
+
+// 定义一个名字为 Example 的服务
+service SignUp {
+    rpc Echo(EchoRequest) returns (EchoResponse);	// 定义一个rpc 
+}
