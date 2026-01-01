@@ -144,11 +144,11 @@ At present, a basic function of data storage has been implemented.
    ```
 
    Generate output based on the options given:
-     start      Start all services
-     stop      Stop all services
-     status   Check service status
-     restart  Restart all services
-     log         View logs (requires a second parameter)
+    start       Start all services
+    stop        Stop all services
+    status      Check service status
+    restart     Restart all services
+    log         View logs (requires a second parameter)
 
 ## **Future plan to implement functions**
 
