@@ -16,7 +16,8 @@ using namespace wfrest;
 //     return size;
 // }
 
-static std::string url = "mysql://root:y@192.168.153.131/test";
+// your db address
+static std::string url = "mysql://root:username@ip/db";
 void CloudiskServer::register_modules()
 {
     register_static_resources_module();

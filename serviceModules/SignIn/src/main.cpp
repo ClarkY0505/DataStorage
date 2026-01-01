@@ -13,11 +13,11 @@
 #include "nlohmann/json.hpp"
 #include <signal.h>
 
-static std::string url = "mysql://root:y@192.168.153.131/test";
-
 using namespace srpc;
 using namespace std;
 
+// your db address
+static std::string url = "mysql://root:username@ip/db";
 static WFFacilities::WaitGroup wait_group(1);
 
 void sig_handler(int)

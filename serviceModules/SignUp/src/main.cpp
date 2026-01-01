@@ -16,8 +16,8 @@ using namespace std;
 using namespace srpc;
 using namespace std::literals;
 
-static std::string url = "mysql://root:y@192.168.153.131/test";
-
+// your db address
+static std::string url = "mysql://root:username@ip/db";
 static WFFacilities::WaitGroup wait_group(1);
 
 void sig_handler(int)
