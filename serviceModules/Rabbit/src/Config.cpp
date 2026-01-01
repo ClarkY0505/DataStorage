@@ -10,13 +10,13 @@ std::string Config::Endpoint = "your endpoint ";
 std::string Config::Bucket = "your bucket";
 
 
-std::string Config::host = "127.0.0.1";  // RabbitMQ Server的地址  
-int Config::port = 5672;            // AMQP协议
+std::string Config::host = "127.0.0.1";  // RabbitMQ Server address
+int Config::port = 5672;            // AMQP
 std::string Config::username = "guest";  
 std::string Config::password = "guest";  
 std::string Config::vhost = "/";  
 std::string Config::uri = "amqp://guest:guest@localhost:5672/%2f";
 
-std::string Config::exchange = "oss.direct";	// 指定交换机
+std::string Config::exchange = "oss.direct";	
 std::string Config::routingKey = "oss";
 

@@ -148,16 +148,7 @@ void OssCustom::ObjectFunction::putObjectFromBuffer(const std::string &objectNam
 
     // std::cout << fileSize << std::endl;
     file.close();
-
-    /* 在一开始我想构建一个自定义的内存缓冲流（MemoryStreamBuffer）
-    *  用来转换图片二进制
-    *  发现OSS只支持传入shared_ptr<iostream>
-    *  但是将我自定义的MemoryStreamBuffer转换为shared_ptr<iostream>
-    *  目前来说可能是一个大工程
-    *  
-    *  这里直接选择将string类型转换为 stringstream
-    *  通过二进制读取存入到stringstream中
-    */
+    
     auto content = std::make_shared<std::stringstream>(fileContent);
     content->seekg(0,std::ios::beg);
 
