@@ -8,23 +8,34 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <signal.h>
 
 #include "../../../inc/CryptoUtil.h"
-#include <signal.h>
+#include "ppconsul/agent.h"
+
 
 using namespace std;
 using namespace srpc;
 using namespace std::literals;
+using namespace ppconsul::agent;
 
-// your db address
-static std::string url = "mysql://root:username@ip/db";
+using ppconsul::Consul;
+
+static std::string url = "mysql://root:y@192.168.153.131/test";
+
 static WFFacilities::WaitGroup wait_group(1);
 
-void sig_handler(int)
+void sig_handler(int signo)
 {
-	wait_group.done();
+    const char* signame = nullptr;
+    switch(signo) {
+        case SIGINT:  signame = "SIGINT (Ctrl+C)"; break;
+        case SIGTERM: signame = "SIGTERM (kill)"; break;
+        default:      signame = "Unknown signal"; break;
+    }
+    cout << "Received signal: " << signame << " (" << signo << ")" << endl;
+    wait_group.done();
 }
-
 void signUpMysqlCallback(WFMySQLTask* task, EchoResponse *response){
     int state = task->get_state();
     if(state != WFT_STATE_SUCCESS){
@@ -84,9 +95,26 @@ public:
 	}
 };
 
+void timerCallback(WFTimerTask* task, Agent& agent)
+{
+    int state = task->get_state();
+    if(state != WFT_STATE_SUCCESS){
+        return;
+    }
+    agent.servicePass("SignUp");
+
+    WFTimerTask* timerTask = WFTaskFactory::create_timer_task(
+        9,
+        0,
+        bind(timerCallback,placeholders::_1,ref(agent))
+    );
+    series_of(task)->push_back(timerTask);
+}
+
 int main()
 {
-	signal(SIGINT, sig_handler);
+	signal(SIGINT, sig_handler);  
+    signal(SIGTERM, sig_handler); 
 	unsigned short port = 12580;
 	SRPCServer server;
 
@@ -94,7 +122,33 @@ int main()
 	server.add_service(&signup_impl);
 
     if(server.start(port) == 0){
+        Consul consul {"http://127.0.0.1:8500",ppconsul::kw::dc="dc1"};
+        Agent agent { consul };
+        agent.registerService(
+            kw::id = "SignUp",
+            kw::name = "SignUpService",
+            kw::address = "127.0.0.1",
+            kw::port = 12580,
+            kw::check = TtlCheck(chrono::seconds{ 10 })
+        );
+        agent.servicePass("SignUp");
+
+        WFTimerTask* timerTask = WFTaskFactory::create_timer_task(
+            9,
+            0,
+            bind(timerCallback,placeholders::_1,ref(agent))
+        );
+
+        SeriesWork* series = Workflow::create_series_work(timerTask,nullptr);
+        series->start();
         wait_group.wait();
+
+        try{
+            agent.deregisterService("SignUp");
+            cout << "Service deregistered from Consul" << endl;
+        }catch (const exception& e){
+            cerr << "Failed to deregister service: " << e.what() << endl;
+        }
         server.stop();
     }
     else{
