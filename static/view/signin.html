@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .login-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        
+        .login-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .login-subtitle {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4a5568;
+            font-size: 14px;
+        }
+        
+        .required {
+            color: #f56565;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: white;
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #a0aec0;
+            cursor: pointer;
+            padding: 4px;
+            font-size: 16px;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+        
+        .login-button:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .login-button:active {
+            transform: translateY(0);
+        }
+        
+        .loading {
+            opacity: 0.8;
+            pointer-events: none;
+        }
+        
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .alert-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .alert-error {
+            background-color: #fed7d7;
+            color: #c53030;
+            border-left: 4px solid #f56565;
+        }
+        
+        .alert-success {
+            background-color: #c6f6d5;
+            color: #276749;
+            border-left: 4px solid #48bb78;
+        }
+        
+        .footer-links {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .footer-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 32px 24px;
+            }
+            
+            .login-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-title">User Login</h1>
+                <p class="login-subtitle">Please enter your username and password.</p>
+            </div>
+            
+            <div id="alertMessage" class="alert-message">
+                <span id="alertText"></span>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="username">
+                        <span class="required">*</span> username:
+                    </label>
+                    <input 
+                        id="username" 
+                        type="text" 
+                        class="form-input" 
+                        placeholder="Please enter your username"
+                        autocomplete="username"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">
+                        <span class="required">*</span> Password:
+                    </label>
+                    <div class="password-container">
+                        <input 
+                            id="password" 
+                            type="password" 
+                            class="form-input" 
+                            placeholder="Please enter the password"
+                            autocomplete="current-password"
+                        >
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+                
+                <button 
+                    type="button" 
+                    class="login-button" 
+                    onclick="onSignin()" 
+                    id="loginButton"
+                >
+                    SignIn
+                </button>
+            </form>
+            
+            <div class="footer-links">
+                <p><a href="#" onclick="showInfo('还睡？马上2026了！')">洗洗睡吧</a> | <a href="#" onclick="showInfo('Currently, it is redirecting to the registration page...'); setTimeout(() => { window.location.href = '/user/signup'; }, 1000); return false;">Sign Up</a> | <a href="#" onclick="showInfo('忘了就忘了吧，没辙！(The reason why Mandarin is used here is that other languages are unable to convey my emotions.)')">Lost Password?</a></p>
+                <p>© 2025 人性亦是白云苍狗,古往今来共一时</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    
+    <script lang="javascript">
+       
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            if (togglePassword) {
+                togglePassword.addEventListener('click', function() {
+                    const isPassword = passwordInput.type === 'password';
+                    passwordInput.type = isPassword ? 'text' : 'password';
+                    this.textContent = isPassword ? '🙈' : '👁️';
+                });
+            }
+            
+            
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    onSignin();
+                });
+            }
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    onSignin();
+                }
+            });
+            
+            
+            setTimeout(() => {
+                document.getElementById('username').focus();
+            }, 300);
+        });
+        
+        
+        function showAlert(message, type = 'error') {
+            const alertElement = document.getElementById('alertMessage');
+            const alertText = document.getElementById('alertText');
+            
+            alertText.textContent = message;
+            alertElement.className = 'alert-message';
+            
+            if (type === 'error') {
+                alertElement.classList.add('alert-error');
+            } else if (type === 'success') {
+                alertElement.classList.add('alert-success');
+            }
+            
+            alertElement.style.display = 'block';
+            
+            
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 5000);
+        }
+        
+        
+        function showInfo(message) {
+            showAlert(message, 'error');
+            return false; 
+        }
+        
+        
+        function onSignin() {
+            var username = document.getElementById('username');
+            var password = document.getElementById('password');
+            
+            
+            if (!username.value.trim()) {
+                showAlert('Please enter the username', 'error');
+                username.focus();
+                return;
+            }
+            
+            if (!password.value) {
+                showAlert('Please enter the password', 'error');
+                password.focus();
+                return;
+            }
+            
+         
+            const loginButton = document.getElementById('loginButton');
+            loginButton.classList.add('loading');
+            loginButton.textContent = 'Logging in';
+            
+           
+            $.ajax({
+                url: "/user/signin",
+                type: "POST",
+                data: {
+                    "username": username.value,
+                    "password": password.value
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  
+                    loginButton.classList.remove('loading');
+                    loginButton.textContent = 'Log in';
+                    
+                    if (textStatus == "error") {
+                        showAlert("network error: " + errorThrown, 'error');
+                    } else {
+                        showAlert("request failure: " + textStatus, 'error');
+                    }
+                },
+                success: function (body, textStatus, jqXHR) {
+                    
+                    loginButton.classList.remove('loading');
+                    loginButton.textContent = 'Log in';
+                    
+                    try {
+                        var resp = JSON.parse(body);
+                        
+                        
+                        if (resp.data) {
+                            showAlert('Login successful. Redirecting...', 'success');
+                            
+                            
+                            localStorage.setItem("token", resp.data.Token);
+                            localStorage.setItem("username", resp.data.Username);
+                            
+                            
+                            setTimeout(() => {
+                                if (resp.data && resp.data.Location) {
+                                    window.location.href = resp.data.Location;
+                                } else {
+                                    window.location.href = "/";
+                                }
+                            }, 1500);
+                        } else {
+                            showAlert('Login failed. Please check your username and password.', 'error');
+                        }
+                    } catch (e) {
+                        showAlert('Server response is abnormal.', 'error');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

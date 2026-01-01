@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern File Upload</title>
+
+    <!-- Bootstrap 4 from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
+
+    <!-- Optional: Include Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0b1220;
+            --card: rgba(255, 255, 255, 0.06);
+            --card2: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.12);
+            --text: rgba(255, 255, 255, 0.88);
+            --muted: rgba(255, 255, 255, 0.6);
+            --accent: #7dd3fc;
+            --accent2: #a78bfa;
+            --good: #34d399;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            background:
+                radial-gradient(1200px 600px at 20% 10%, rgba(125, 211, 252, 0.18), transparent 55%),
+                radial-gradient(900px 500px at 80% 0%, rgba(167, 139, 250, 0.18), transparent 55%),
+                radial-gradient(900px 500px at 60% 100%, rgba(52, 211, 153, 0.10), transparent 55%),
+                var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB",
+                "Microsoft YaHei", Arial, sans-serif;
+        }
+
+    </style>
+</head>
+
+<body style="font-family: Arial, sans-serif;">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2 class="text-center mb-4">Upload Your File</h2>
+                <form action="#" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input id="file" name="file" type="file" class="file" data-msg-placeholder="Choose a file"
+                            data-browse-on-zone-click="true">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include JS from CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        $(document).ready(function () {
+            // Initialize fileinput plugin with custom settings
+            $('#file').fileinput({
+                theme: 'fa',
+                uploadUrl: '#', // Set upload URL here
+                allowedFileExtensions: ['jpg', 'png', 'gif', 'pdf', 'docx'],
+                showUpload: false,
+                showCancel: false,
+                showRemove: true,
+                browseLabel: 'Browse Files',
+                browseIcon: '<i class="fas fa-folder-open"></i>',
+                removeIcon: '<i class="fas fa-trash-alt"></i>',
+            });
+        });
+    </script>
+</body>
+
+</html>
